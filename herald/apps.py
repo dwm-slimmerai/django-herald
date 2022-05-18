@@ -4,6 +4,7 @@ Django app config for herald. Using this to call autodiscover
 
 from django.apps import AppConfig
 from django.db.utils import OperationalError, ProgrammingError
+from asgiref.sync import sync_to_async
 
 
 class HeraldConfig(AppConfig):
@@ -23,7 +24,7 @@ class HeraldConfig(AppConfig):
         try:
             # add any new notifications to database.
             for index, klass in enumerate(registry._registry):
-                notification, created = Notification.objects.get_or_create(
+                notification, created = sync_to_async(Notification.objects.get_or_create)(
                     notification_class=klass.get_class_path(),
                     defaults={
                         'verbose_name': klass.get_verbose_name(),
