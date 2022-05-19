@@ -41,9 +41,9 @@ class HeraldConfig(AppConfig):
             pass
 
 
-@sync_to_async
-def async_get_or_create(klass):
-    notification, created = Notification.objects.get_or_create(
+async def async_get_or_create(klass):
+    notification, created = await sync_to_async(
+        Notification.objects.get_or_create)(
         notification_class = klass.get_class_path(),
         defaults = {
             'verbose_name': klass.get_verbose_name(),
