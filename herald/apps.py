@@ -24,12 +24,13 @@ class HeraldConfig(AppConfig):
         try:
             # add any new notifications to database.
             for index, klass in enumerate(registry._registry):
-                notification, created = async_get_or_create(klass)
+                notification, created = await async_get_or_create(klass)
 
                 if not created:
-                    notification.verbose_name = sync_to_async(
+                    notification.verbose_name = await sync_to_async(
                         klass.get_verbose_name)()
-                    notification.can_disable = sync_to_async(klass.can_disable)
+                    notification.can_disable = await sync_to_async(
+                        klass.can_disable)
                     notification.sync_to_async(save)()
 
         except OperationalError:
