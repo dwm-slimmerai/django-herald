@@ -24,7 +24,7 @@ class HeraldConfig(AppConfig):
         try:
             # add any new notifications to database.
             for index, klass in enumerate(registry._registry):
-                notification, created = await async_get_or_create(klass)
+                notification, created = async_get_or_create(klass)
 
                 if not created:
                     notification.verbose_name = await sync_to_async(
@@ -43,7 +43,7 @@ class HeraldConfig(AppConfig):
 
 @sync_to_async
 def async_get_or_create(klass):
-    notification, created = Notification.objects.get_or_create(
+    notification, created = await Notification.objects.get_or_create(
         notification_class = klass.get_class_path(),
         defaults = {
             'verbose_name': klass.get_verbose_name(),
