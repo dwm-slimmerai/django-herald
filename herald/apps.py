@@ -27,11 +27,11 @@ class HeraldConfig(AppConfig):
                 notification, created = async_get_or_create(klass)
 
                 if not created:
-                    notification.verbose_name = await sync_to_async(
+                    notification.verbose_name = sync_to_async(
                         klass.get_verbose_name)()
-                    notification.can_disable = await sync_to_async(
+                    notification.can_disable = sync_to_async(
                         klass.can_disable)
-                    notification.sync_to_async(save)()
+                    sync_to_async(notification.save)()
 
         except OperationalError:
             # if the table is not created yet, just keep going.
